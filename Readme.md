@@ -47,3 +47,4 @@ Best Practice
 
 
 # Data Sanitization & scheme validations
+- npm validator => for validating the emails 
