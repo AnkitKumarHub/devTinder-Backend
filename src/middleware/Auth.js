@@ -1,4 +1,4 @@
- const adminAuth = (req, res, next) => {
+const adminAuth = (req, res, next) => {
   const token = "xyz";
   const isAdminAuthorized = token === "xyz";
   if (!isAdminAuthorized) {
@@ -7,7 +7,7 @@
   next();
 };
 
- const userAuth = (req, res, next) => {
+const userAuth = (req, res, next) => {
   const token = "xyz";
   const isUserAuthorized = token === "xyz";
   if (!isUserAuthorized) {

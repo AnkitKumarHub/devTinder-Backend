@@ -51,29 +51,56 @@ app.post("/signup", async (req, res) => {
 });
 
 //finding one user by email
-app.get("/user", async (req,res)=>{
+app.get("/user", async (req, res) => {
   const userEmail = req.body.email;
   try {
-    const user = await User.find({email: userEmail});
-    if(user.length === 0){
+    const user = await User.find({ email: userEmail });
+    if (user.length === 0) {
       res.status(404).send("User Not Found !!");
-    }else{
+    } else {
       res.send(user);
     }
   } catch (error) {
     res.status(404).send("Error in finding user !!");
   }
-})
+});
 
 //Feed API - GET /feed - get all the users from the database
-app.get("/feed", async(req,res)=>{
+app.get("/feed", async (req, res) => {
   try {
     const users = await User.find({});
     res.send(users);
   } catch (error) {
     res.status(404).send("Error in finding user !!");
   }
-})
+});
+
+//Delete a User from the database by ID
+app.delete("/user", async (req, res) => {
+  const userId = req.body._id;
+
+  try {
+    await User.findByIdAndDelete(userId);
+    res.send("User Deleted Successfully !!");
+  } catch (error) {
+    res.status(404).send("Error in deleting user !!");
+  }
+});
+
+//Update data of a User from the database by ID
+app.patch("/user", async (req, res) => {
+  const userId = req.body._id;
+  const updateData = req.body;
+  // console.log(updateData);
+  try {
+    await User.findByIdAndUpdate(userId, updateData, {
+      runValidators: true,
+    });
+    res.send("User Updated Successfully !!");
+  } catch (error) {
+    res.status(400).send("Error in updating user !!" + error.message);
+  }
+});
 
 connectDb()
   .then(() => {
