@@ -4,6 +4,9 @@ const express = require("express");
 const app = express();
 const connectDb = require("./src/config/dB.js");
 const User = require("./src/models/user.js");
+const { validateSignUpData } = require("./src/utils/validation.js");
+const bcrypt = require("bcrypt");
+const validator = require("validator");
 
 //Route Handler => "use" can be used for all types of requests wether it is get, post, put, delete
 
@@ -38,15 +41,53 @@ const User = require("./src/models/user.js");
 app.use(express.json()); // to read the json data from the body of the request
 
 app.post("/signup", async (req, res) => {
-  // creating a new instance of the User Model
-  const user = new User(req.body);
-  console.log(req.body);
-
   try {
+    //validate the data from the request body
+    validateSignUpData(req);
+
+    const { firstName, lastName, email, password } = req.body;
+    //encrypt the password
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    // creating a new instance of the User Model
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashPassword,
+    });
+    // console.log(req.body);
+
     await user.save();
     res.send("User Created Successfully !!");
   } catch (error) {
-    res.status(400).send("Error in creating user !!" + error.message);
+    res.status(400).send("ERROR: " + error.message);
+  }
+});
+
+//Login API - POST /login - login a user
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("Email and Password are required !!");
+    }
+    if (!validator.isEmail(email)) {
+      throw new Error("Email is invalid !!");
+    }
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("User Not Found !!");
+    }
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      throw new Error("Invalid Credential !!");
+    } else {
+      res.send("Login Successful !!");
+    }
+  } catch (error) {
+    res.status(400).send("ERROR: " + error.message);
   }
 });
 
@@ -93,7 +134,6 @@ app.patch("/user", async (req, res) => {
   const updateData = req.body;
   // console.log(updateData);
 
-
   try {
     const ALLOWED_UPDATES = ["photoUrl", "about", "skills", "age"];
     const isUpdateAllowed = Object.keys(updateData).every((update) =>
@@ -103,10 +143,10 @@ app.patch("/user", async (req, res) => {
       throw new Error("Invalid Update !!");
     }
 
-    if(data?.skills?.length > 10){
+    if (data?.skills?.length > 10) {
       throw new Error("Skills should be less than 10 !!");
     }
-    
+
     await User.findByIdAndUpdate(userId, updateData, {
       runValidators: true,
     });

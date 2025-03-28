@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
         if (!validator.isEmail(value)) {
           throw new Error("Email is invalid !!" + value);
         }
-      }
+      },
     },
     password: {
       type: String,
@@ -29,7 +29,6 @@ const userSchema = new mongoose.Schema(
     },
     age: {
       type: Number,
-      required: [true, "Age is required"],
       min: [18, "You must be 18 or older"],
       max: [80, "You must be 100 or younger"],
     },
