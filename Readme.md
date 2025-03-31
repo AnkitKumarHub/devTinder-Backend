@@ -51,3 +51,6 @@ Best Practice
 
 
 # Encrypting Passwords
+
+
+using jsonwebtoken for generating the jwt tokens

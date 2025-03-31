@@ -7,6 +7,8 @@ const User = require("./src/models/user.js");
 const { validateSignUpData } = require("./src/utils/validation.js");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 //Route Handler => "use" can be used for all types of requests wether it is get, post, put, delete
 
@@ -39,6 +41,7 @@ const validator = require("validator");
 //*********************** DATABASE SCHEMA & MODELS MONGOOSE **********************/
 
 app.use(express.json()); // to read the json data from the body of the request
+app.use(cookieParser()); // to read the cookies from the request
 
 app.post("/signup", async (req, res) => {
   try {
@@ -76,16 +79,50 @@ app.post("/login", async (req, res) => {
       throw new Error("Email is invalid !!");
     }
 
+    //find the user by email
     const user = await User.findOne({ email: email });
     if (!user) {
       throw new Error("User Not Found !!");
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
+
     if (!isPasswordMatch) {
       throw new Error("Invalid Credential !!");
     } else {
+      //Generate JWT Token => passing the secret key ( "Dev@Dinder" ) to sign the token && hiding the user id in the token
+      const token = await jwt.sign({ _id: user._id }, "DEV@Dinder");
+      console.log(token);
+
+      //Add the token to the cookies & send the response back to the user
+      res.cookie("token", token);
       res.send("Login Successful !!");
     }
+  } catch (error) {
+    res.status(400).send("ERROR: " + error.message);
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  try {
+    const cookies = req.cookies;
+
+    const { token } = cookies;
+    if (!token) {
+      throw new Error ("Unauthorized !!");
+    }
+
+    //verify the token from the cookies
+    const decodedMessage = await jwt.verify(token, "DEV@Dinder");
+    
+    const {_id} = decodedMessage;
+    console.log("Logged in User is: " + _id);
+
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("User Not Found !!");
+    }
+
+    res.send(user);
   } catch (error) {
     res.status(400).send("ERROR: " + error.message);
   }
