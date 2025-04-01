@@ -54,3 +54,12 @@ Best Practice
 
 
 using jsonwebtoken for generating the jwt tokens
+
+how to set expiration in the cookies or jwt token 
+
+* There is something known as mongoose schema method 
+this user schema bascially defines the user model and its properties
+
+so i can attach few methods onto this schema which is applicable for all the users => what are these method => these are helper method which are very closely related to the user 
+
+for eg => when we are trying to hit login API we are creating JWT token => every user will have the jwt token 
