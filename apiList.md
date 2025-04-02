@@ -8,7 +8,7 @@
 ## profileRouter
 - GET /profile/view
 - PATCH /profile/edit
-- Patch /profile/password
+- Patch /profile/editPassword
 
 ## connectionRequestRouter
 - POST /request/send/interested/:userId
