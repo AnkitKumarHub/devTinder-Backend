@@ -24,12 +24,12 @@ const validateEditProfileData = (req) => {
     "about",
     "skills",
   ];
-// i will loop through the keys of the request body and check if they are in the allowedEditFields array
-  const isEditAllowed = Object.keys(req.body).every((key) =>  
+  // i will loop through the keys of the request body and check if they are in the allowedEditFields array
+  const isEditAllowed = Object.keys(req.body).every((key) =>
     allowedEditFields.includes(key)
   );
   return isEditAllowed;
-}; 
+};
 
 module.exports = {
   validateSignUpData,

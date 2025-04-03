@@ -70,3 +70,16 @@ for eg => when we are trying to hit login API we are creating JWT token => every
 - Express Router to handle the API Routes => used to handle large no of API's (Industry Best practice to group the project)
 
 
+
+# Logical DB Query & Compound Indexes
+- enum in mongoose. It will allow only to choose from the given value-options only.
+- To store the _id(mongoDB id) we create the type => mongoose.Schema.Types.ObjectId
+
+
++ How to put index in database
+    why do we need indexes in DB
+    what is the advantage/disadvanategs of creating indexes
+    compound indxes
+
+
+

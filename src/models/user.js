@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
-      unique: true,
+      unique: true,   // this will make sure that the email is unique in the database and automatic indexing is done on this field
       lowercase: true,
       trim: true,
       validator(value) {
@@ -39,11 +39,15 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      validate(value) {
-        if (!["male", "female", "others"].includes(value.toLowerCase())) {
-          throw new Error("gender data is invalid !!");
-        }
+      enum:{
+        values: ["male", "female", "others"],
+        message: `{VALUE} is not supported !!`,
       },
+      // validate(value) {
+      //   if (!["male", "female", "others"].includes(value.toLowerCase())) {
+      //     throw new Error("gender data is invalid !!");
+      //   }
+      // },
     },
     photoUrl: {
       type: String,
@@ -66,16 +70,19 @@ userSchema.methods.getJWT = async function () {
   const token = await jwt.sign({ _id: user._id }, "DEV@Dinder", {
     expiresIn: "1Day",
   });
-  return token; 
+  return token;
 };
 
-userSchema.methods.validatePassword = async function (passwordInputByUser){
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
   const user = this;
   const passwordHash = user.password; // password from the user object
 
-  const isPasswordVaid = await bcrypt.compare(passwordInputByUser, passwordHash);
+  const isPasswordVaid = await bcrypt.compare(
+    passwordInputByUser,
+    passwordHash
+  );
 
   return isPasswordVaid;
-}
+};
 
 module.exports = mongoose.model("User", userSchema);
