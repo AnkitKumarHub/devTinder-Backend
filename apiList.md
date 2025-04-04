@@ -25,9 +25,16 @@
 - POST /request/review/accepted/:requestId
 - POST /request/review/rejected/:requestId
 
+=> POST /request/review/:status/:requestId
+for e.g => Akshay(fromUserId) =>is sending "INTERESTED" Connection request to =>  Elon(toUserId)
+1. validate the status (accepted/rejected)
+2. is reciever(toUserId) is loggedIn => only elon should be able to accept/reject the request (no 3rd-party or akshay itself can accpept/reject the request) 
+3. the status of connection should be in the "interested" state only than only the elon(toUserId) could accept/reject the request If the satus is "ignored" no one can change the request and send the connection  
+4. requestId should be valid 
+
 ## userRouter
+- GET /user/request/received
 - GET /user/connections
-- GET /user/request
 - GET /user/feed    -Gets you the profile of other user on platform 
 
 

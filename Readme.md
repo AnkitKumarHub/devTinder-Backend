@@ -83,3 +83,14 @@ for eg => when we are trying to hit login API we are creating JWT token => every
 
 
 
+# 
+- Thought process behind the GET vs POST
+Post Api - The user is trying enter some data in DB 
+    How can a attacker exploit your POST api 
+    - sending some random data into your api and bymistake you put that data in your DB 
+    - so i will verify everything which is coming in my request 
+
+Get api - user is trying to fetch some data from the database 
+    - In GET API we will make sure to send only the allowed data to authorized user 
+
+
