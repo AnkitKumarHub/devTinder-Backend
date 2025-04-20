@@ -94,3 +94,17 @@ Get api - user is trying to fetch some data from the database
     - In GET API we will make sure to send only the allowed data to authorized user 
 
 
+
+
+# Building Feed API & Paginaiton
+
+- Feed API
+    If we are going to build the feed of AKSHAY then what are the users that we want to show on his feed and what users not??
+
+        - akshay should see the user whom he doesn't have send the connection req => which means if akshay has send the request to the elon than we dont want to see the card of elon or if akshay have ignore someone profile that this profile should also not come on the feed 
+        - akshay should not see the user who are already connected.
+        - akshay should not see the card of himself 
+        
+         
+
+

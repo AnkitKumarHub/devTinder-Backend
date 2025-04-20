@@ -40,3 +40,62 @@ for e.g => Akshay(fromUserId) =>is sending "INTERESTED" Connection request to =>
 
 
 Status: ignore, interested, accepted, rejected 
+
+
+
+User should see all the users cards except 
+0. his own card
+1. his already connection
+2. ignored people
+3. already send the connection request
+
+eg: Rahul =[Mark, Donald, MS DHoni, Virat]  //people whose card still will be seen
+Rahul-> Akshay -> rejected    Rahul-> elon -> accepted 
+elon-> will see all but except Rahul (they are already connected)
+Akshay-> will not see Rahul because rahul has already rejected 
+
+These profile shouldn't be shown in rahul feed (if the entry is made in the connection req model then it should not be shown whether its accepted/rejected)
+
+
+
+* we should add "pagination" that if the new user gets onboarded 
+    - When the user goes on feed API the db should not return => 999 records from the DB => only return 10 users and then next 10 (add Pagination)
+
+
+Pagination => 
+
+/feed?page=1&limit=10 => first 10 users   Page 1: skip(0).limit(10) → Returns documents 1-10
+/feed?page=2&limit=10 => 11-20  Page 2: skip(10).limit(10) → Returns documents 11-20
+/feed?page=3&limit=10 => 21-30 Page 3: skip(20).limit(10) → Returns documents 21-30
+
+in mongo DB we have 2 methods 
+1. skip() => Purpose: Skips a specified number of documents in a query
+Syntax: skip(n) where n is the number of documents to skip
+Usage: Usually calculated based on page number and limit
+Formula: skip = (pageNumber - 1) * limit
+Example: For page 2 with 10 items per page:  
+await User.find().skip(10).limit(10)  // Skips first 10 documents and returns next 10
+
+2. limit() => Purpose: Limits the number of documents returned in a query
+Syntax: limit(n) where n is the maximum number of documents to return
+Example: If you want to show 10 users per page: 
+await User.find().limit(10)  // Returns only 10 documents
+
+
+How They Work Together for Pagination
+Let's say you have 100 users and want to implement pagination with 10 users per page:
+
+const page = 2; // Page number from query params
+const limit = 10; // Items per page
+const skip = (page - 1) * limit; // Calculate how many documents to skip
+
+// This will skip first 10 documents and return next 10
+const users = await User.find()
+    .skip(skip)  // Skip 10 documents
+    .limit(limit); // Return 10 documents
+
+
+For different pages:
+
+
+
