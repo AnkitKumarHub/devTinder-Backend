@@ -4,6 +4,9 @@ const express = require("express");
 const app = express();
 const connectDb = require("./src/config/dB.js");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+
+// app.set("trust proxy", 1);
 
 
 //Route Handler => "use" can be used for all types of requests wether it is get, post, put, delete
@@ -35,7 +38,16 @@ const cookieParser = require("cookie-parser");
 // });
 
 //*********************** DATABASE SCHEMA & MODELS MONGOOSE **********************/
+app.use(cors
+  ({
+  //cookies were not set bcuz if we're not on the same domain or we're not on a secure network => the axios/browser doesn't allow setting cookies  => so we've to use corsoptions to whitelist some domains
 
+  // origin: "https://dev-tinder-delta-one.vercel.app",//FROM WHERE THE FRONTEND IS HOSTED
+  origin: "http://localhost:5173",//FROM WHERE THE FRONTEND IS HOSTED
+  credentials: true,
+  //allow credentials to be sent with the request ( cookies, authorization headers, etc. )
+  })
+);
 app.use(express.json()); // to read the json data from the body of the request
 app.use(cookieParser()); // to read the cookies from the request
 
@@ -53,8 +65,8 @@ app.use("/",userRouter); // for all the routes starting with /user, use the user
 connectDb()
   .then(() => {
     console.log("Database Connected");
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
+    app.listen(7777, () => {
+      console.log("Server is running on port 7777...");
     });
   })
   .catch((err) => {
