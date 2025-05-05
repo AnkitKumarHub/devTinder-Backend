@@ -6,6 +6,12 @@ const connectDb = require("./src/config/dB.js");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+const http = require("http");
+
+require("dotenv").config();
+
+require("./src/utils/cronjobs")
+
 // app.set("trust proxy", 1);
 
 
@@ -56,16 +62,26 @@ const authRouter = require("./src/routes/auth");
 const profileRouter = require("./src/routes/profile");
 const requestRouter = require("./src/routes/request");
 const userRouter = require("./src/routes/user");
+const paymentRouter = require("./src/routes/payment");
+const initialiseSocket = require("./src/utils/socket");
+const chatRouter = require("./src/routes/chat");
 
 app.use("/", authRouter); // for all the routes starting with /auth, use the authRouter
 app.use("/", profileRouter); // for all the routes starting with /profile, use the profileRouter
 app.use("/", requestRouter); // for all the routes starting with /request, use the requestRouter
 app.use("/",userRouter); // for all the routes starting with /user, use the userRouter
+app.use("/", paymentRouter);
+app.use("/", chatRouter);
+
+const server = http.createServer(app);
+
+initialiseSocket(server);
+
 
 connectDb()
   .then(() => {
     console.log("Database Connected");
-    app.listen(7777, () => {
+    server.listen(7777, () => {
       console.log("Server is running on port 7777...");
     });
   })

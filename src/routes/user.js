@@ -7,7 +7,7 @@ const User = require("../models/user");
 const USER_SAFE_DATA = "firstName lastName age gender photUrl about skills";
 
 // Get all "pending" connection requests for the logged in user
-userRouter.get("/user/request/received", userAuth, async (req, res) => {
+userRouter.get("/user/request/recieved", userAuth, async (req, res) => {
   try {
     const loggedinUser = req.user;
 
@@ -21,8 +21,7 @@ userRouter.get("/user/request/received", userAuth, async (req, res) => {
     // }).populate("fromUserId", ["firstName", "lastName", "age", "gender", "photUrl", "about", "skills"]); // this will populate the fromUserId field with the user data
 
     res.json({
-      message: "Data fetched successfully",
-      data: pendingRequests,
+      pendingRequests,
     });
   } catch (error) {
     res.status(400).send("ERROR: " + error.message);

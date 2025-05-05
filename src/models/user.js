@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
-      unique: true,   // this will make sure that the email is unique in the database and automatic indexing is done on this field
+      unique: true, // this will make sure that the email is unique in the database and automatic indexing is done on this field
       lowercase: true,
       trim: true,
       validator(value) {
@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
+      validate(value) {
+        if (!validator.isStrongPassword(value)) {
+          throw new Error("your pswd is not strong");
+        }
+      },
     },
     age: {
       type: Number,
@@ -39,17 +44,36 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum:{
-        values: ["male", "female", "others"],
-        message: `{VALUE} is not supported !!`,
-      },
-      // validate(value) {
-      //   if (!["male", "female", "others"].includes(value.toLowerCase())) {
-      //     throw new Error("gender data is invalid !!");
-      //   }
+      // enum:{
+      //   values: ["male", "female", "others"],
+      //   message: `{VALUE} is not supported !!`,
       // },
+      validate(value) {
+        if (
+          !["male", "female", "other", "prefer not to say"].includes(
+            value.toLowerCase()
+          )
+        ) {
+          throw new Error(value + " is not a valid gender type");
+        }
+      },
     },
     photoUrl: {
+      type: String,
+      default: "https://www.dgvaishnavcollege.edu.in/dummy-profile-pic/",
+      // validate(value)
+      // {
+      //     if(!validator.isURL(value))
+      //     {
+      //         throw new Error("Invalid url: " + value);
+      //     }
+      // }
+    },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    membershipType: {
       type: String,
     },
     about: {

@@ -1,1 +1,11 @@
 node_modules
+.env
+
+src/models/chat.js
+src/models/payment.js
+src/routes/payment.js
+src/routes/chat.js
+
+
+src/utils/razorpay.js
+src/utils/socket.js
