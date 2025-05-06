@@ -6,7 +6,7 @@ const connectDb = require("./src/config/dB.js");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const http = require("http");
+const http = require("http"); //for creating a server using the express app for socket.io
 
 require("dotenv").config();
 
@@ -73,7 +73,7 @@ app.use("/",userRouter); // for all the routes starting with /user, use the user
 app.use("/", paymentRouter);
 app.use("/", chatRouter);
 
-const server = http.createServer(app);
+const server = http.createServer(app);  // this app is the express app and we are creating a server using http module and passing the express app to it
 
 initialiseSocket(server);
 
