@@ -48,7 +48,7 @@ app.use(cors
   ({
   //cookies were not set bcuz if we're not on the same domain or we're not on a secure network => the axios/browser doesn't allow setting cookies  => so we've to use corsoptions to whitelist some domains
 
-  origin: "dev-tinder-pied-seven.vercel.app",//FROM WHERE THE FRONTEND IS HOSTED
+  origin: ["https://dev-tinder-pied-seven.vercel.app", "http://localhost:5173"],//FROM WHERE THE FRONTEND IS HOSTED
   credentials: true,
   //allow credentials to be sent with the request ( cookies, authorization headers, etc. )
   })

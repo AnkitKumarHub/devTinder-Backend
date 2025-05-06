@@ -15,7 +15,7 @@ const initialiseSocket = (server) => {
   const io = socket(server, {
     cors: {
       origin: [
-        "dev-tinder-pied-seven.vercel.app",
+        "https://dev-tinder-pied-seven.vercel.app",
         "http://localhost:5173",
       ],
     },
@@ -75,7 +75,7 @@ const initialiseSocket = (server) => {
               participants: [userId, targetUserId],
               messages: [],
             });
-          } 
+          }
 
           chat.messages.push({
             senderId: userId,
