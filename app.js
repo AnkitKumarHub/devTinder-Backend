@@ -44,15 +44,13 @@ require("./src/utils/cronjobs")
 // });
 
 //*********************** DATABASE SCHEMA & MODELS MONGOOSE **********************/
-app.use(cors
-  ({
-  //cookies were not set bcuz if we're not on the same domain or we're not on a secure network => the axios/browser doesn't allow setting cookies  => so we've to use corsoptions to whitelist some domains
-
+app.use(cors({
   origin: ["https://dev-tinder-pied-seven.vercel.app", "http://localhost:5173"],//FROM WHERE THE FRONTEND IS HOSTED
   credentials: true,
-  //allow credentials to be sent with the request ( cookies, authorization headers, etc. )
-  })
-);
+  exposedHeaders: ['set-cookie'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
+}));
 app.use(express.json()); // to read the json data from the body of the request
 app.use(cookieParser()); // to read the cookies from the request
 

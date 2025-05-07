@@ -89,10 +89,9 @@ const userSchema = new mongoose.Schema(
 
 //always use normal function instead of arrow function because arrow function does not have this keyword
 userSchema.methods.getJWT = async function () {
-  const user = this; // this refers to the user object
-
-  const token = await jwt.sign({ _id: user._id }, "DEV@Dinder", {
-    expiresIn: "1Day",
+  const user = this;
+  const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: '24h'  // Using standard format for token expiry
   });
   return token;
 };

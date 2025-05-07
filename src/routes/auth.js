@@ -27,7 +27,11 @@ authRouter.post("/signup", async (req, res) => {
 
     const token = await savedUser.getJWT();
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day expiration time
+      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+      secure: true, // Required for production
+      sameSite: 'none', // Required for cross-origin cookies
+      // domain: '.onrender.com' // Your backend domain
     });
     res.json({ message: "User Created Successfully !!", user: savedUser });
   } catch (error) {
@@ -64,7 +68,11 @@ authRouter.post("/login", async (req, res) => {
 
       //Add the token to the cookies & send the response back to the user
       res.cookie("token", token, {
-        expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day expiration time
+        expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: true, // Required for production
+        sameSite: 'none', // Required for cross-origin cookies
+        // domain: '.onrender.com' // Your backend domain
       });
       console.log("user", user);
       res.send(user);
@@ -77,6 +85,10 @@ authRouter.post("/login", async (req, res) => {
 authRouter.post("/logout", async (req, res) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
+    httpOnly: true,
+    secure: true, // Required for production
+    sameSite: 'none', // Required for cross-origin cookies
+    // domain: '.onrender.com' // Your backend domain
   });
   res.send("Logout Successful !!");
 });
